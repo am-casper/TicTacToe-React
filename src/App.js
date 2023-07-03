@@ -86,6 +86,7 @@ export default function Game() {
   const [isXnext, setisXNext] = useState(true);
   const [history, setHistory] = useState(sq);
   const [moveCell, setMoveCell] = useState(Array(9).fill(""));
+  const [isToggled, toggle] = useState(false)
   let color = Array(9).fill("white");
   const currentSquares = sq[sq.length - 1];
   let gamelist = history.map((_sq, move) => {
@@ -101,10 +102,15 @@ export default function Game() {
       </li>
     );
   });
+  function  historyList(state) {
+    if(state) {
+      console.log("Hi")
+      return (<ol>{gamelist.reverse()}</ol>)}
+    return (<ol>{gamelist}</ol>)
+  }
   function jumpTo(move) {
     setisXNext(move % 2 == 0);
     setSq(history.slice(0, move + 1));
-    // console.log(sq.slice(0,move-1))
   }
   function onBoardClick(nextSq, i) {
     let NextSq = [...sq, nextSq];
@@ -158,6 +164,9 @@ export default function Game() {
     let text = "You are at move #".concat(sq.length);
     return { text };
   };
+  const callback = () => {
+    toggle(!isToggled)
+}
   return (
     <>
       <div>{moveText}</div>
@@ -173,8 +182,13 @@ export default function Game() {
           />
         </div>
         <div className="game-info">
-          <ol>{gamelist.reverse()}</ol>
+          {historyList(isToggled)}
         </div>
+        <label>
+            <input type="checkbox" defaultChecked={isToggled} onClick={callback} />
+            <span />
+            <strong>Reverse History</strong>
+        </label>
       </div>
     </>
   );
